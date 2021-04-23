@@ -37,7 +37,15 @@ Lets have a peek on the generated docker-compose file to see if it is good to go
 docker-compose config
 ```
 
-If everything is safe and sound. Lets rock!
+Optionally, you can add a `.env` file in this folder to be able to change these configs:
+
+``` env
+MYSQL_DATABASE=wordpress
+MYSQL_USER=example_user
+MYSQL_PASSWORD=iii3studi1
+```
+
+If everything is beautiful enough. Lets rock!
 
 ``` bash
 docker-compose up -d
