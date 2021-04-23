@@ -1,0 +1,39 @@
+version: "3"
+
+services:
+  mysql_db_{{PROJECT_NAME}}_{{BUILD_ID}}:
+    image: mysql:5.7
+    volumes:
+      - db_data_{{PROJECT_NAME}}_{{BUILD_ID}}:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE-wordpress}
+      MYSQL_USER: ${MYSQL_USER-example_user}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD-iii3studi1}
+      MYSQL_RANDOM_ROOT_PASSWORD: "1"
+      #MYSQL_ROOT_PASSWORD: iii3studi1
+
+  wordpress_{{PROJECT_NAME}}_{{BUILD_ID}}:
+    depends_on:
+      - mysql_db_{{PROJECT_NAME}}_{{BUILD_ID}}
+    image: "{{PROJECT_NAME}}:{{BUILD_ID}}"
+    expose:
+      - 80
+      - 443
+    restart: always
+    environment:
+      WORDPRESS_DB_HOST: mysql_db_{{PROJECT_NAME}}_{{BUILD_ID}}:3306
+      WORDPRESS_DB_NAME: ${MYSQL_DATABASE-wordpress}
+      WORDPRESS_DB_USER: ${MYSQL_USER-example_user}
+      WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD-iii3studi1}
+      VIRTUAL_HOST: "{{PROJECT_NAME}}-{{BUILD_ID}}.dev9w.xyz"
+      LETSENCRYPT_HOST: "{{PROJECT_NAME}}-{{BUILD_ID}}.dev9w.xyz"
+      LETSENCRYPT_EMAIL: trathailoi@gmail.com
+
+volumes:
+  db_data_{{PROJECT_NAME}}_{{BUILD_ID}}:
+
+networks:
+  default:
+    external:
+      name: nginx-proxy-net
